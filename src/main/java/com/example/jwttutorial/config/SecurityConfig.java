@@ -24,16 +24,18 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig  {
 
     private final TokenProvider tokenProvider;
-    //private final CorsFilter corsFilter;
+    private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     public SecurityConfig(
             TokenProvider tokenProvider,
+            CorsFilter corsFilter,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtAccessDeniedHandler jwtAccessDeniedHandler
     ) {
         this.tokenProvider = tokenProvider;
+        this.corsFilter = corsFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
@@ -51,7 +53,7 @@ public class SecurityConfig  {
                 //security로 인해 h2 db가 사용되도록 disable
                 .csrf().disable()
 
-                //.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
